@@ -50,10 +50,12 @@ const [node1, node2] = await Promise.all([
 ])
 
 node1.addEventListener('peer:discovery', (evt) => {
-  const peer = evt.detail
-  console.log(`Peer ${node1.peerId.toString()} discovered: ${peer.id.toString()}`)
+  const peer = evt.detail;
+  console.log(`Peer ${node1.peerId.toString()} discovered: ${peer.id.toString()}`);
+  console.log(peer.multiaddrs);
 })
 node2.addEventListener('peer:discovery', (evt) => {
   const peer = evt.detail
-  console.log(`Peer ${node2.peerId.toString()} discovered: ${peer.id.toString()}`)
+  console.log(`Peer ${node2.peerId.toString()} discovered: ${peer.id.toString()}`);
+  console.log(peer.multiaddrs);
 })
