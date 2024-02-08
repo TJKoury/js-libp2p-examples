@@ -10,6 +10,7 @@ import { pubsubPeerDiscovery } from '@libp2p/pubsub-peer-discovery';
 import { tcp } from '@libp2p/tcp'
 import { createLibp2p } from 'libp2p';
 import { ping } from '@libp2p/ping';
+import { mdns } from '@libp2p/mdns';
 
 const createNode = async (bootstrappers = []) => {
   const config = {
@@ -22,6 +23,9 @@ const createNode = async (bootstrappers = []) => {
     peerDiscovery: [
       pubsubPeerDiscovery({
         interval: 1000
+      }),
+      mdns({
+        interval: 200
       })
     ],
     services: {
