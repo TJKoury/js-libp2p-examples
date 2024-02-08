@@ -41,11 +41,10 @@ const createNode = async (bootstrappers = []) => {
 }
 
 const bootstrapper = await createNode([]);
-console.log(bootstrapper.multiaddrs)
 
-console.log(`libp2p bootstrapper started with id: ${bootstrapper.peerId.toString()}`)
+console.log(`libp2p bootstrapper started with id: ${bootstrapper.peerId.toString()}`);
 
-const bootstrapperMultiaddrs = ['/ip4/192.168.1.223/tcp/34675/p2p/12D3KooWPhWYW1KNsxqSCjck7ZAWDqJCrdQpgakdWtJjrzH33Yhk'];//bootstrapper.getMultiaddrs().map((m) => m.toString())
+const bootstrapperMultiaddrs = bootstrapper.getMultiaddrs().map((m) => m.toString());
 console.log(bootstrapperMultiaddrs);
 const [node1, node2] = await Promise.all([
   createNode(bootstrapperMultiaddrs),
