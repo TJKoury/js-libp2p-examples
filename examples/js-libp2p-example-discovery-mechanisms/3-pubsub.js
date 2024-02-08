@@ -43,7 +43,7 @@ const bootstrapper = await createNode([])
 console.log(`libp2p bootstrapper started with id: ${bootstrapper.peerId.toString()}`)
 
 const bootstrapperMultiaddrs = bootstrapper.getMultiaddrs().map((m) => m.toString())
-
+console.log(bootstrapperMultiaddrs);
 const [node1, node2] = await Promise.all([
   createNode(bootstrapperMultiaddrs),
   createNode(bootstrapperMultiaddrs)
