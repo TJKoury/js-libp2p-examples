@@ -40,9 +40,10 @@ const createNode = async (bootstrappers = []) => {
   return await createLibp2p(config);
 }
 
-//const bootstrapper = await createNode([])
+const bootstrapper = await createNode([]);
+console.log(bootstrapper.multiaddrs)
 
-//console.log(`libp2p bootstrapper started with id: ${bootstrapper.peerId.toString()}`)
+console.log(`libp2p bootstrapper started with id: ${bootstrapper.peerId.toString()}`)
 
 const bootstrapperMultiaddrs = ['/ip4/192.168.1.223/tcp/34675/p2p/12D3KooWPhWYW1KNsxqSCjck7ZAWDqJCrdQpgakdWtJjrzH33Yhk'];//bootstrapper.getMultiaddrs().map((m) => m.toString())
 console.log(bootstrapperMultiaddrs);
