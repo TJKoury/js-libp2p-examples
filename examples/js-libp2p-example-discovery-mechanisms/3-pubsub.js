@@ -21,8 +21,11 @@ const createNode = async (bootstrappers = []) => {
     streamMuxers: [yamux(), mplex()],
     connectionEncryption: [noise()],
     peerDiscovery: [
+      pubsubPeerDiscovery({
+        interval: 1000
+      }),
       mdns({
-        interval: 200
+        interval: 20e3
       })
     ],
     services: {
@@ -54,15 +57,12 @@ const [node1, node2] = await Promise.all([
 
 node1.addEventListener('peer:discovery', (evt) => {
   const peer = evt.detail;
-  if (peer.id.toString() === "12D3KooWKDdfe91VdVQSJGGjRWDwx4d7q6ctaRScTRttDpncAvff") {
-    console.log(`Peer ${node2.peerId.toString()} discovered: ${peer.id.toString()}`);
-    console.log(peer.multiaddrs);
-  }
+  console.log(`Peer ${node2.peerId.toString()} discovered: ${peer.id.toString()}`);
+  console.log(peer.multiaddrs);
+
 })
 node2.addEventListener('peer:discovery', (evt) => {
   const peer = evt.detail;
-  if (peer.id.toString() === "12D3KooWKDdfe91VdVQSJGGjRWDwx4d7q6ctaRScTRttDpncAvff") {
-    console.log(`Peer ${node2.peerId.toString()} discovered: ${peer.id.toString()}`);
-    console.log(peer.multiaddrs);
-  }
+  console.log(`Peer ${node2.peerId.toString()} discovered: ${peer.id.toString()}`);
+  console.log(peer.multiaddrs);
 })

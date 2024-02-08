@@ -26,7 +26,8 @@ const createNode = async () => {
         interval: 20e3
       })
     ]
-  })
+  });
+  console.log(node.peerId)
 
   return node
 }
