@@ -25,7 +25,7 @@ const createNode = async (bootstrappers = []) => {
       })
     ],
     services: {
-      ping: ping(),
+      ping: ping({ protocolPrefix: "spacedatanetwork" }),
       pubsub: floodsub(),
       identify: identify()
     }
