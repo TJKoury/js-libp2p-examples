@@ -21,9 +21,6 @@ const createNode = async (bootstrappers = []) => {
     streamMuxers: [yamux(), mplex()],
     connectionEncryption: [noise()],
     peerDiscovery: [
-      pubsubPeerDiscovery({
-        interval: 1000
-      }),
       mdns({
         interval: 200
       })
