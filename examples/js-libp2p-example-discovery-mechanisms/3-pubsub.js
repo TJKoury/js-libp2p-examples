@@ -76,19 +76,21 @@ setInterval(() => {
 /************Node 2*/
 
 node2.services.pubsub.subscribe('timestamp');
-node2.services.pubsub.addEventListener('message', (message) => {
+let tt = node2.services.pubsub.addEventListener('message', (message) => {
   if (message.detail.topic === "timestamp") {
     console.log(`${message.detail.topic}:`, new TextDecoder().decode(message.detail.data))
   }
 });
-let tt = node2.addEventListener('peer:discovery', (evt) => {
+
+node2.addEventListener('peer:discovery', (evt) => {
   const peer = evt.detail;
   //console.log(`Peer ${node2.peerId.toString()} discovered: ${peer.id.toString()}`);
   //console.log(peer.multiaddrs);
 });
 
-//setTimeout(() => {
-// bootstrapper.stop();
-// node1.stop();
-// node2.stop();
-//}, 10000);
+setTimeout(() => {
+  bootstrapper.stop();
+  node1.stop();
+  node2.stop();
+  process.exit(); 
+}, 5000);
