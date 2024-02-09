@@ -3,7 +3,7 @@
 import { noise } from '@chainsafe/libp2p-noise';
 import { yamux } from '@chainsafe/libp2p-yamux';
 import { bootstrap } from '@libp2p/bootstrap';
-import { floodsub } from '@libp2p/floodsub';
+import { gossipsub } from '@chainsafe/libp2p-gossipsub';
 import { identify } from '@libp2p/identify';
 import { mplex } from '@libp2p/mplex';
 import { pubsubPeerDiscovery } from '@libp2p/pubsub-peer-discovery';
@@ -30,7 +30,7 @@ const createNode = async (bootstrappers = []) => {
     ],
     services: {
       ping: ping({ protocolPrefix: "spacedatanetwork" }),
-      pubsub: floodsub(),
+      pubsub: gossipsub({ emitSelf: false }),
       identify: identify()
     }
   }
@@ -58,11 +58,38 @@ const [node1, node2] = await Promise.all([
 node1.addEventListener('peer:discovery', (evt) => {
   const peer = evt.detail;
   console.log(`Peer ${node2.peerId.toString()} discovered: ${peer.id.toString()}`);
-  console.log(peer.multiaddrs);
+  console.log(peer.multiaddrs[0]);
+  peer.multiaddrs.forEach(async (m) => {
+    let latency = await node1.services.ping.ping(m).catch(e => { });
+    if (latency !== undefined) {
+      console.log(`pinged ${m} in ${latency}ms`);
+    }
+  });
+});
 
-})
+
+
+setInterval(() => {
+  node1.services.pubsub.publish('fruit', new TextEncoder().encode('banana')).catch(e => { })
+}, 500);
+
+/************Node 2*/
+
+node2.services.pubsub.subscribe('fruit');
+node2.services.pubsub.addEventListener('message', (message) => {
+  if (message.detail.topic === "fruit") {
+    console.log(`${message.detail.topic}:`, new TextDecoder().decode(message.detail.data))
+  }
+});
 node2.addEventListener('peer:discovery', (evt) => {
   const peer = evt.detail;
-  console.log(`Peer ${node2.peerId.toString()} discovered: ${peer.id.toString()}`);
-  console.log(peer.multiaddrs);
-})
+  //console.log(`Peer ${node2.peerId.toString()} discovered: ${peer.id.toString()}`);
+  //console.log(peer.multiaddrs);
+});
+
+
+setTimeout(() => {
+  bootstrapper.stop();
+  node1.stop();
+  node2.stop();
+}, 10000);
