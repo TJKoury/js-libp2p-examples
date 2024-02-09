@@ -70,26 +70,25 @@ node1.addEventListener('peer:discovery', (evt) => {
 
 
 setInterval(() => {
-  node1.services.pubsub.publish('fruit', new TextEncoder().encode('banana')).catch(e => { })
+  node1.services.pubsub.publish('timestamp', new TextEncoder().encode(new Date().toISOString())).catch(e => { })
 }, 500);
 
 /************Node 2*/
 
-node2.services.pubsub.subscribe('fruit');
+node2.services.pubsub.subscribe('timestamp');
 node2.services.pubsub.addEventListener('message', (message) => {
-  if (message.detail.topic === "fruit") {
+  if (message.detail.topic === "timestamp") {
     console.log(`${message.detail.topic}:`, new TextDecoder().decode(message.detail.data))
   }
 });
-node2.addEventListener('peer:discovery', (evt) => {
+let tt = node2.addEventListener('peer:discovery', (evt) => {
   const peer = evt.detail;
   //console.log(`Peer ${node2.peerId.toString()} discovered: ${peer.id.toString()}`);
   //console.log(peer.multiaddrs);
 });
 
-
-setTimeout(() => {
-  bootstrapper.stop();
-  node1.stop();
-  node2.stop();
-}, 10000);
+//setTimeout(() => {
+// bootstrapper.stop();
+// node1.stop();
+// node2.stop();
+//}, 10000);
